@@ -48,15 +48,15 @@ BSCFLAGS += -bdir $(BDIR)
 #BSCFLAGS += -steps-warn-interval n
 
 #.PHONY: all
-#all: mkDummyDE10Pro_bsv_shell_Synth.v mkPassThroughToDRAMDE10Pro_bsv_shell_Synth.v
+#all: mkDummyDE10Pro_bsv_shell_Sig.v mkPassThroughToDRAMDE10Pro_bsv_shell_Sig.v
 
-mkPassThroughToDRAMDE10Pro_bsv_shell_Synth.v: $(SRCS)
+mkPassThroughToDRAMDE10Pro_bsv_shell_Sig.v: $(SRCS)
 	mkdir -p $(BDIR)
-	$(BSC) $(BSCFLAGS) -verilog -g mkPassThroughToDRAMDE10Pro_bsv_shell_Synth -u DE10Pro_bsv_shell.bsv
+	$(BSC) $(BSCFLAGS) -verilog -g mkPassThroughToDRAMDE10Pro_bsv_shell_Sig -u DE10Pro_bsv_shell.bsv
 
-mkDummyDE10Pro_bsv_shell_Synth.v: $(SRCS)
+mkDummyDE10Pro_bsv_shell_Sig.v: $(SRCS)
 	mkdir -p $(BDIR)
-	$(BSC) $(BSCFLAGS) -verilog -g mkDummyDE10Pro_bsv_shell_Synth -u DE10Pro_bsv_shell.bsv
+	$(BSC) $(BSCFLAGS) -verilog -g mkDummyDE10Pro_bsv_shell_Sig -u DE10Pro_bsv_shell.bsv
 
 .PHONY: clean mrproper
 

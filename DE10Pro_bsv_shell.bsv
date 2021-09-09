@@ -34,8 +34,8 @@ import AXI4_AXI4Lite_Bridges :: *;
 
 import Vector :: *;
 
-///////////////////////////////////////
-// "non synth in-bluespec" interface //
+/////////////////////////////////////
+// "non sig in-bluespec" interface //
 ////////////////////////////////////////////////////////////////////////////////
 
 interface DE10Pro_bsv_shell #(
@@ -154,11 +154,11 @@ interface DE10Pro_bsv_shell #(
                          , t_ddrd_ruser ) axm_ddrd;
 endinterface
 
-//////////////////////////////////
-// Replicated "synth" interface //
+////////////////////////////////
+// Replicated "sig" interface //
 ////////////////////////////////////////////////////////////////////////////////
 
-interface DE10Pro_bsv_shell_Synth #(
+interface DE10Pro_bsv_shell_Sig #(
 // Light-weight HPS to FPGA AXI port parameters
   numeric type t_h2f_lw_addr
 , numeric type t_h2f_lw_data
@@ -215,70 +215,70 @@ interface DE10Pro_bsv_shell_Synth #(
 );
   // Light-weight HPS to FPGA AXI port
   // ---------------------------------
-  interface AXI4Lite_Slave_Synth #( t_h2f_lw_addr
-                                  , t_h2f_lw_data
-                                  , t_h2f_lw_awuser
-                                  , t_h2f_lw_wuser
-                                  , t_h2f_lw_buser
-                                  , t_h2f_lw_aruser
-                                  , t_h2f_lw_ruser ) axls_h2f_lw;
+  interface AXI4Lite_Slave_Sig #( t_h2f_lw_addr
+                                , t_h2f_lw_data
+                                , t_h2f_lw_awuser
+                                , t_h2f_lw_wuser
+                                , t_h2f_lw_buser
+                                , t_h2f_lw_aruser
+                                , t_h2f_lw_ruser ) axls_h2f_lw;
   // HPS to FPGA AXI port
   // --------------------
-  interface AXI4_Slave_Synth #( t_h2f_id
-                              , t_h2f_addr
-                              , t_h2f_data
-                              , t_h2f_awuser
-                              , t_h2f_wuser
-                              , t_h2f_buser
-                              , t_h2f_aruser
-                              , t_h2f_ruser ) axs_h2f;
+  interface AXI4_Slave_Sig #( t_h2f_id
+                            , t_h2f_addr
+                            , t_h2f_data
+                            , t_h2f_awuser
+                            , t_h2f_wuser
+                            , t_h2f_buser
+                            , t_h2f_aruser
+                            , t_h2f_ruser ) axs_h2f;
   // FPGA to HPS AXI port
   // --------------------
-  interface AXI4_Master_Synth #( t_f2h_id
-                               , t_f2h_addr
-                               , t_f2h_data
-                               , t_f2h_awuser
-                               , t_f2h_wuser
-                               , t_f2h_buser
-                               , t_f2h_aruser
-                               , t_f2h_ruser ) axm_f2h;
+  interface AXI4_Master_Sig #( t_f2h_id
+                             , t_f2h_addr
+                             , t_f2h_data
+                             , t_f2h_awuser
+                             , t_f2h_wuser
+                             , t_f2h_buser
+                             , t_f2h_aruser
+                             , t_f2h_ruser ) axm_f2h;
   // DDRB AXI port
   // -------------
-  interface AXI4_Master_Synth #( t_ddrb_id
-                               , t_ddrb_addr
-                               , t_ddrb_data
-                               , t_ddrb_awuser
-                               , t_ddrb_wuser
-                               , t_ddrb_buser
-                               , t_ddrb_aruser
-                               , t_ddrb_ruser ) axm_ddrb;
+  interface AXI4_Master_Sig #( t_ddrb_id
+                             , t_ddrb_addr
+                             , t_ddrb_data
+                             , t_ddrb_awuser
+                             , t_ddrb_wuser
+                             , t_ddrb_buser
+                             , t_ddrb_aruser
+                             , t_ddrb_ruser ) axm_ddrb;
   // DDRC AXI port
   // -------------
-  interface AXI4_Master_Synth #( t_ddrc_id
-                               , t_ddrc_addr
-                               , t_ddrc_data
-                               , t_ddrc_awuser
-                               , t_ddrc_wuser
-                               , t_ddrc_buser
-                               , t_ddrc_aruser
-                               , t_ddrc_ruser ) axm_ddrc;
+  interface AXI4_Master_Sig #( t_ddrc_id
+                             , t_ddrc_addr
+                             , t_ddrc_data
+                             , t_ddrc_awuser
+                             , t_ddrc_wuser
+                             , t_ddrc_buser
+                             , t_ddrc_aruser
+                             , t_ddrc_ruser ) axm_ddrc;
   // DDRD AXI port
   // -------------
-  interface AXI4_Master_Synth #( t_ddrd_id
-                               , t_ddrd_addr
-                               , t_ddrd_data
-                               , t_ddrd_awuser
-                               , t_ddrd_wuser
-                               , t_ddrd_buser
-                               , t_ddrd_aruser
-                               , t_ddrd_ruser ) axm_ddrd;
+  interface AXI4_Master_Sig #( t_ddrd_id
+                             , t_ddrd_addr
+                             , t_ddrd_data
+                             , t_ddrd_awuser
+                             , t_ddrd_wuser
+                             , t_ddrd_buser
+                             , t_ddrd_aruser
+                             , t_ddrd_ruser ) axm_ddrd;
 endinterface
 
-////////////////////////////////////
-// convert "non-synth" to "synth" //
+////////////////////////////////
+// convert "non-sig" to "sig" //
 ////////////////////////////////////////////////////////////////////////////////
 
-module toDE10Pro_bsv_shell_Synth #(
+module toDE10Pro_bsv_shell_Sig #(
   DE10Pro_bsv_shell #( // Light-weight HPS to FPGA AXI port parameters
                        t_h2f_lw_addr
                      , t_h2f_lw_data
@@ -332,71 +332,71 @@ module toDE10Pro_bsv_shell_Synth #(
                      , t_ddrd_buser
                      , t_ddrd_aruser
                      , t_ddrd_ruser ) ifc)
-  (DE10Pro_bsv_shell_Synth #( // Light-weight HPS to FPGA AXI port parameters
-                              t_h2f_lw_addr
-                            , t_h2f_lw_data
-                            , t_h2f_lw_awuser
-                            , t_h2f_lw_wuser
-                            , t_h2f_lw_buser
-                            , t_h2f_lw_aruser
-                            , t_h2f_lw_ruser
-                            // HPS to FPGA AXI port parameters
-                            , t_h2f_id
-                            , t_h2f_addr
-                            , t_h2f_data
-                            , t_h2f_awuser
-                            , t_h2f_wuser
-                            , t_h2f_buser
-                            , t_h2f_aruser
-                            , t_h2f_ruser
-                            // FPGA to HPS AXI port parameters
-                            , t_f2h_id
-                            , t_f2h_addr
-                            , t_f2h_data
-                            , t_f2h_awuser
-                            , t_f2h_wuser
-                            , t_f2h_buser
-                            , t_f2h_aruser
-                            , t_f2h_ruser
-                            // DDRB AXI port parameters
-                            , t_ddrb_id
-                            , t_ddrb_addr
-                            , t_ddrb_data
-                            , t_ddrb_awuser
-                            , t_ddrb_wuser
-                            , t_ddrb_buser
-                            , t_ddrb_aruser
-                            , t_ddrb_ruser
-                            // DDRC AXI port parameters
-                            , t_ddrc_id
-                            , t_ddrc_addr
-                            , t_ddrc_data
-                            , t_ddrc_awuser
-                            , t_ddrc_wuser
-                            , t_ddrc_buser
-                            , t_ddrc_aruser
-                            , t_ddrc_ruser
-                            // DDRD AXI port parameters
-                            , t_ddrd_id
-                            , t_ddrd_addr
-                            , t_ddrd_data
-                            , t_ddrd_awuser
-                            , t_ddrd_wuser
-                            , t_ddrd_buser
-                            , t_ddrd_aruser
-                            , t_ddrd_ruser ));
-  let axls_h2f_lw_synth <- toAXI4Lite_Slave_Synth (ifc.axls_h2f_lw);
-  let axs_h2f_synth <- toAXI4_Slave_Synth (ifc.axs_h2f);
-  let axm_f2h_synth <- toAXI4_Master_Synth (ifc.axm_f2h);
-  let axm_ddrb_synth <- toAXI4_Master_Synth (ifc.axm_ddrb);
-  let axm_ddrc_synth <- toAXI4_Master_Synth (ifc.axm_ddrc);
-  let axm_ddrd_synth <- toAXI4_Master_Synth (ifc.axm_ddrd);
-  interface axls_h2f_lw = axls_h2f_lw_synth;
-  interface axs_h2f = axs_h2f_synth;
-  interface axm_f2h = axm_f2h_synth;
-  interface axm_ddrb = axm_ddrb_synth;
-  interface axm_ddrc = axm_ddrc_synth;
-  interface axm_ddrd = axm_ddrd_synth;
+  (DE10Pro_bsv_shell_Sig #( // Light-weight HPS to FPGA AXI port parameters
+                            t_h2f_lw_addr
+                          , t_h2f_lw_data
+                          , t_h2f_lw_awuser
+                          , t_h2f_lw_wuser
+                          , t_h2f_lw_buser
+                          , t_h2f_lw_aruser
+                          , t_h2f_lw_ruser
+                          // HPS to FPGA AXI port parameters
+                          , t_h2f_id
+                          , t_h2f_addr
+                          , t_h2f_data
+                          , t_h2f_awuser
+                          , t_h2f_wuser
+                          , t_h2f_buser
+                          , t_h2f_aruser
+                          , t_h2f_ruser
+                          // FPGA to HPS AXI port parameters
+                          , t_f2h_id
+                          , t_f2h_addr
+                          , t_f2h_data
+                          , t_f2h_awuser
+                          , t_f2h_wuser
+                          , t_f2h_buser
+                          , t_f2h_aruser
+                          , t_f2h_ruser
+                          // DDRB AXI port parameters
+                          , t_ddrb_id
+                          , t_ddrb_addr
+                          , t_ddrb_data
+                          , t_ddrb_awuser
+                          , t_ddrb_wuser
+                          , t_ddrb_buser
+                          , t_ddrb_aruser
+                          , t_ddrb_ruser
+                          // DDRC AXI port parameters
+                          , t_ddrc_id
+                          , t_ddrc_addr
+                          , t_ddrc_data
+                          , t_ddrc_awuser
+                          , t_ddrc_wuser
+                          , t_ddrc_buser
+                          , t_ddrc_aruser
+                          , t_ddrc_ruser
+                          // DDRD AXI port parameters
+                          , t_ddrd_id
+                          , t_ddrd_addr
+                          , t_ddrd_data
+                          , t_ddrd_awuser
+                          , t_ddrd_wuser
+                          , t_ddrd_buser
+                          , t_ddrd_aruser
+                          , t_ddrd_ruser ));
+  let axls_h2f_lw_sig <- toAXI4Lite_Slave_Sig (ifc.axls_h2f_lw);
+  let axs_h2f_sig <- toAXI4_Slave_Sig (ifc.axs_h2f);
+  let axm_f2h_sig <- toAXI4_Master_Sig (ifc.axm_f2h);
+  let axm_ddrb_sig <- toAXI4_Master_Sig (ifc.axm_ddrb);
+  let axm_ddrc_sig <- toAXI4_Master_Sig (ifc.axm_ddrc);
+  let axm_ddrd_sig <- toAXI4_Master_Sig (ifc.axm_ddrd);
+  interface axls_h2f_lw = axls_h2f_lw_sig;
+  interface axs_h2f = axs_h2f_sig;
+  interface axm_f2h = axm_f2h_sig;
+  interface axm_ddrb = axm_ddrb_sig;
+  interface axm_ddrc = axm_ddrc_sig;
+  interface axm_ddrd = axm_ddrd_sig;
 endmodule
 
 // Concrete parameters definitions
@@ -489,58 +489,58 @@ typedef DE10Pro_bsv_shell #( `H2F_LW_ADDR
                            , `DRAM_ARUSER
                            , `DRAM_RUSER ) ConcreteDE10Pro_bsv_shell;
 
-typedef DE10Pro_bsv_shell_Synth #( `H2F_LW_ADDR
-                                 , `H2F_LW_DATA
-                                 , `H2F_LW_AWUSER
-                                 , `H2F_LW_WUSER
-                                 , `H2F_LW_BUSER
-                                 , `H2F_LW_ARUSER
-                                 , `H2F_LW_RUSER
-                                 , `H2F_ID
-                                 , `H2F_ADDR
-                                 , `H2F_DATA
-                                 , `H2F_AWUSER
-                                 , `H2F_WUSER
-                                 , `H2F_BUSER
-                                 , `H2F_ARUSER
-                                 , `H2F_RUSER
-                                 , `F2H_ID
-                                 , `F2H_ADDR
-                                 , `F2H_DATA
-                                 , `F2H_AWUSER
-                                 , `F2H_WUSER
-                                 , `F2H_BUSER
-                                 , `F2H_ARUSER
-                                 , `F2H_RUSER
-                                 , `DRAM_ID
-                                 , `DRAM_ADDR
-                                 , `DRAM_DATA
-                                 , `DRAM_AWUSER
-                                 , `DRAM_WUSER
-                                 , `DRAM_BUSER
-                                 , `DRAM_ARUSER
-                                 , `DRAM_RUSER
-                                 , `DRAM_ID
-                                 , `DRAM_ADDR
-                                 , `DRAM_DATA
-                                 , `DRAM_AWUSER
-                                 , `DRAM_WUSER
-                                 , `DRAM_BUSER
-                                 , `DRAM_ARUSER
-                                 , `DRAM_RUSER
-                                 , `DRAM_ID
-                                 , `DRAM_ADDR
-                                 , `DRAM_DATA
-                                 , `DRAM_AWUSER
-                                 , `DRAM_WUSER
-                                 , `DRAM_BUSER
-                                 , `DRAM_ARUSER
-                                 , `DRAM_RUSER ) ConcreteDE10Pro_bsv_shell_Synth;
+typedef DE10Pro_bsv_shell_Sig #( `H2F_LW_ADDR
+                               , `H2F_LW_DATA
+                               , `H2F_LW_AWUSER
+                               , `H2F_LW_WUSER
+                               , `H2F_LW_BUSER
+                               , `H2F_LW_ARUSER
+                               , `H2F_LW_RUSER
+                               , `H2F_ID
+                               , `H2F_ADDR
+                               , `H2F_DATA
+                               , `H2F_AWUSER
+                               , `H2F_WUSER
+                               , `H2F_BUSER
+                               , `H2F_ARUSER
+                               , `H2F_RUSER
+                               , `F2H_ID
+                               , `F2H_ADDR
+                               , `F2H_DATA
+                               , `F2H_AWUSER
+                               , `F2H_WUSER
+                               , `F2H_BUSER
+                               , `F2H_ARUSER
+                               , `F2H_RUSER
+                               , `DRAM_ID
+                               , `DRAM_ADDR
+                               , `DRAM_DATA
+                               , `DRAM_AWUSER
+                               , `DRAM_WUSER
+                               , `DRAM_BUSER
+                               , `DRAM_ARUSER
+                               , `DRAM_RUSER
+                               , `DRAM_ID
+                               , `DRAM_ADDR
+                               , `DRAM_DATA
+                               , `DRAM_AWUSER
+                               , `DRAM_WUSER
+                               , `DRAM_BUSER
+                               , `DRAM_ARUSER
+                               , `DRAM_RUSER
+                               , `DRAM_ID
+                               , `DRAM_ADDR
+                               , `DRAM_DATA
+                               , `DRAM_AWUSER
+                               , `DRAM_WUSER
+                               , `DRAM_BUSER
+                               , `DRAM_ARUSER
+                               , `DRAM_RUSER ) ConcreteDE10Pro_bsv_shell_Sig;
 
 // trivial examples
 // ----------------
 
-module mkDummyDE10Pro_bsv_shell_Synth (ConcreteDE10Pro_bsv_shell_Synth);
+module mkDummyDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
   interface axls_h2f_lw = culDeSac;
   interface axs_h2f = culDeSac;
   interface axm_f2h = culDeSac;
@@ -587,10 +587,10 @@ module mkPassThroughToDRAMDE10Pro_bsv_shell (ConcreteDE10Pro_bsv_shell);
   interface axm_ddrd = ddrdShim.master;
 endmodule
 
-module mkPassThroughToDRAMDE10Pro_bsv_shell_Synth (ConcreteDE10Pro_bsv_shell_Synth);
-  let noSynth <- mkPassThroughToDRAMDE10Pro_bsv_shell;
-  let synth <- toDE10Pro_bsv_shell_Synth (noSynth);
-  return synth;
+module mkPassThroughToDRAMDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
+  let noSig <- mkPassThroughToDRAMDE10Pro_bsv_shell;
+  let sig <- toDE10Pro_bsv_shell_Sig (noSig);
+  return sig;
 endmodule
 
 endpackage
