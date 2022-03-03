@@ -34,6 +34,18 @@ import AXI4_AXI4Lite_Bridges :: *;
 
 import Vector :: *;
 
+// helper interface for irqs //
+///////////////////////////////
+
+interface Irq;
+  (* prefix = "" *)
+  (* result = "irq" *)
+  (* always_ready, always_enabled *)
+  method Bool _read;
+endinterface
+
+Irq noIrq = interface Irq; method _read = False; endinterface;
+
 /////////////////////////////////////
 // "non sig in-bluespec" interface //
 ////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +166,7 @@ interface DE10Pro_bsv_shell #(
                          , t_ddrd_ruser ) axm_ddrd;
   // Interrupt sender interface
   // --------------------------
-  interface Vector #(32, ReadOnly #(Bool)) ins_irq0;
+  interface Vector #(32, Irq) irqs;
 endinterface
 
 ////////////////////////////////
@@ -277,9 +289,9 @@ interface DE10Pro_bsv_shell_Sig #(
                              , t_ddrd_ruser ) axm_ddrd;
   // Interrupt sender interface
   // --------------------------
+  (* prefix = "ins" *)
   (* always_ready, always_enabled *)
-  //interface Vector #(32, ReadOnly #(Bool)) ins_irq0;
-  interface Bit #(32) ins_irq0;
+  interface Vector #(32, Irq) irqs;
 endinterface
 
 ////////////////////////////////
@@ -405,7 +417,7 @@ module toDE10Pro_bsv_shell_Sig #(
   interface axm_ddrb = axm_ddrb_sig;
   interface axm_ddrc = axm_ddrc_sig;
   interface axm_ddrd = axm_ddrd_sig;
-  interface ins_irq0 = pack (map (readReadOnly, ifc.ins_irq0));
+  interface irqs = ifc.irqs;
 endmodule
 
 // Concrete parameters definitions
@@ -556,7 +568,7 @@ module mkDummyDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
   interface axm_ddrb = culDeSac;
   interface axm_ddrc = culDeSac;
   interface axm_ddrd = culDeSac;
-  interface ins_irq0 = 0;
+  interface irqs = replicate (noIrq);
 endmodule
 
 module mkPassThroughToDRAMDE10Pro_bsv_shell (ConcreteDE10Pro_bsv_shell);
@@ -595,9 +607,7 @@ module mkPassThroughToDRAMDE10Pro_bsv_shell (ConcreteDE10Pro_bsv_shell);
   interface axm_ddrb = ddrbShim.master;
   interface axm_ddrc = ddrcShim.master;
   interface axm_ddrd = ddrdShim.master;
-  interface ins_irq0 = replicate (interface ReadOnly;
-                                    method _read = False;
-                                  endinterface);
+  interface irqs = replicate (noIrq);
 endmodule
 
 module mkPassThroughToDRAMDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
