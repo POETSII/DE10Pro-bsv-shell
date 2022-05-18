@@ -1,0 +1,92 @@
+= DE10Pro-bsv-shell
+
+A Bluespec SystemVerilog Interface definition for DE10Pro projects. It defines a set of sub-interfaces exposing some of the devices available on the board to the code implementing the interface.
+
+== Available sub-interfaces
+
+=== H2F_LW
+
+[code,bsv]
+------------
+interface AXI4Lite_Slave #( t_h2f_lw_addr
+                          , t_h2f_lw_data
+                          , t_h2f_lw_awuser
+                          , t_h2f_lw_wuser
+                          , t_h2f_lw_buser
+                          , t_h2f_lw_aruser
+                          , t_h2f_lw_ruser ) axls_h2f_lw;
+------------
+
+An AXI4 Lite slave port receiving requests from the ARM HPS embedded on the FPGA.
+
+=== H2F
+
+[code,bsv]
+------------
+interface AXI4_Slave #( t_h2f_id
+                      , t_h2f_addr
+                      , t_h2f_data
+                      , t_h2f_awuser
+                      , t_h2f_wuser
+                      , t_h2f_buser
+                      , t_h2f_aruser
+                      , t_h2f_ruser ) axs_h2f;
+------------
+
+An AXI4 slave port receiving requests from the ARM HPS embedded on the FPGA.
+
+=== F2H
+
+[code,bsv]
+------------
+interface AXI4_Master #( t_f2h_id
+                        , t_f2h_addr
+                        , t_f2h_data
+                        , t_f2h_awuser
+                        , t_f2h_wuser
+                        , t_f2h_buser
+                        , t_f2h_aruser
+                        , t_f2h_ruser ) axm_f2h;
+------------
+
+An AXI4 Master port sending requests to the ARM HPS embedded on the FPGA.
+
+=== DDRB
+
+[code,bsv]
+------------
+interface AXI4_Master #( t_ddrb_id
+                       , t_ddrb_addr
+                       , t_ddrb_data
+                       , t_ddrb_awuser
+                       , t_ddrb_wuser
+                       , t_ddrb_buser
+                       , t_ddrb_aruser
+                       , t_ddrb_ruser ) axm_ddrb;
+------------
+
+An AXI4 Master port to reach the DDR B channel.
+
+=== DDRC
+
+Defined similarly to <<DDRB>>.
+
+=== DDRD
+
+Defined similarly to <<DDRB>>.
+
+=== Interrupts
+
+[code,bsv]
+------------
+interface Vector #(32, Irq) irqs;
+------------
+
+A vector of 32 interrupt lines coming out of the implemented design, typically to be routed to the HPS.
+
+== Intended use
+
+The design can use the `DE10Pro_bsv_shell` interface and provide an implementation of the individual sub-interfaces.
+The `toDE10Pro_bsv_shell_Sig` module can then be used to retreive a `DE10Pro_bsv_shell_Sig` interface which exposes signals with appropriate names for further usage in EDA tools (for example Quartus, with the help of the https://github.com/CTSRD-CHERI/vipbundle[vipbundle] tool).
+
+A trivial example implementation of the interface, `mkPassThroughToDRAMDE10Pro_bsv_shell`, can be found in https://github.com/POETSII/DE10Pro-bsv-shell/blob/main/DE10Pro_bsv_shell.bsv[DE10Pro_bsv_shell.bsv].
