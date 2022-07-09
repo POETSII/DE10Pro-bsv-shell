@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2021 Alexandre Joannou
+ * Copyright (c) 2021-2022 Alexandre Joannou
  * All rights reserved.
  *
  * This material is based upon work supported by the DoD Information Analysis
@@ -30,9 +30,8 @@
 
 package DE10Pro_bsv_shell;
 
-import AXI4 :: *;
-import AXI4Lite :: *;
-import AXI4_AXI4Lite_Bridges :: *;
+import BlueAXI4 :: *;
+import SourceSink :: *;
 
 import Vector :: *;
 
@@ -106,6 +105,9 @@ interface DE10Pro_bsv_shell #(
 , numeric type t_ddrd_buser
 , numeric type t_ddrd_aruser
 , numeric type t_ddrd_ruser
+// High Speed Links
+, type t_link_tx
+, type t_link_rx
 );
   // Light-weight HPS to FPGA AXI port
   // ---------------------------------
@@ -166,6 +168,16 @@ interface DE10Pro_bsv_shell #(
                          , t_ddrd_buser
                          , t_ddrd_aruser
                          , t_ddrd_ruser ) axm_ddrd;
+  // High Speed Links
+  // ----------------
+  interface Source #(t_link_tx) tx_north;
+  interface   Sink #(t_link_rx) rx_north;
+  interface Source #(t_link_tx)  tx_east;
+  interface   Sink #(t_link_rx)  rx_east;
+  interface Source #(t_link_tx) tx_south;
+  interface   Sink #(t_link_rx) rx_south;
+  interface Source #(t_link_tx)  tx_west;
+  interface   Sink #(t_link_rx)  rx_west;
   // Interrupt sender interface
   // --------------------------
   interface Vector #(32, Irq) irqs;
@@ -229,6 +241,9 @@ interface DE10Pro_bsv_shell_Sig #(
 , numeric type t_ddrd_buser
 , numeric type t_ddrd_aruser
 , numeric type t_ddrd_ruser
+// High Speed Links
+, type t_link_tx
+, type t_link_rx
 );
   // Light-weight HPS to FPGA AXI port
   // ---------------------------------
@@ -289,6 +304,16 @@ interface DE10Pro_bsv_shell_Sig #(
                              , t_ddrd_buser
                              , t_ddrd_aruser
                              , t_ddrd_ruser ) axm_ddrd;
+  // High Speed Links
+  // ----------------
+  interface Source #(t_link_tx) tx_north;
+  interface   Sink #(t_link_rx) rx_north;
+  interface Source #(t_link_tx)  tx_east;
+  interface   Sink #(t_link_rx)  rx_east;
+  interface Source #(t_link_tx) tx_south;
+  interface   Sink #(t_link_rx) rx_south;
+  interface Source #(t_link_tx)  tx_west;
+  interface   Sink #(t_link_rx)  rx_west;
   // Interrupt sender interface
   // --------------------------
   (* prefix = "ins" *)
@@ -353,7 +378,10 @@ module toDE10Pro_bsv_shell_Sig #(
                      , t_ddrd_wuser
                      , t_ddrd_buser
                      , t_ddrd_aruser
-                     , t_ddrd_ruser ) ifc)
+                     , t_ddrd_ruser
+                     // High Speed Links parameters
+                     , t_link_tx
+                     , t_link_rx ) ifc)
   (DE10Pro_bsv_shell_Sig #( // Light-weight HPS to FPGA AXI port parameters
                             t_h2f_lw_addr
                           , t_h2f_lw_data
@@ -406,20 +434,31 @@ module toDE10Pro_bsv_shell_Sig #(
                           , t_ddrd_wuser
                           , t_ddrd_buser
                           , t_ddrd_aruser
-                          , t_ddrd_ruser ));
+                          , t_ddrd_ruser
+                          // High Speed Links parameters
+                          , t_link_tx
+                          , t_link_rx ));
   let axls_h2f_lw_sig <- toAXI4Lite_Slave_Sig (ifc.axls_h2f_lw);
-  let axs_h2f_sig <- toAXI4_Slave_Sig (ifc.axs_h2f);
-  let axm_f2h_sig <- toAXI4_Master_Sig (ifc.axm_f2h);
-  let axm_ddrb_sig <- toAXI4_Master_Sig (ifc.axm_ddrb);
-  let axm_ddrc_sig <- toAXI4_Master_Sig (ifc.axm_ddrc);
-  let axm_ddrd_sig <- toAXI4_Master_Sig (ifc.axm_ddrd);
+  let axs_h2f_sig     <-         toAXI4_Slave_Sig (ifc.axs_h2f);
+  let axm_f2h_sig     <-        toAXI4_Master_Sig (ifc.axm_f2h);
+  let axm_ddrb_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrb);
+  let axm_ddrc_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrc);
+  let axm_ddrd_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrd);
   interface axls_h2f_lw = axls_h2f_lw_sig;
-  interface axs_h2f = axs_h2f_sig;
-  interface axm_f2h = axm_f2h_sig;
-  interface axm_ddrb = axm_ddrb_sig;
-  interface axm_ddrc = axm_ddrc_sig;
-  interface axm_ddrd = axm_ddrd_sig;
-  interface irqs = ifc.irqs;
+  interface     axs_h2f =     axs_h2f_sig;
+  interface     axm_f2h =     axm_f2h_sig;
+  interface    axm_ddrb =    axm_ddrb_sig;
+  interface    axm_ddrc =    axm_ddrc_sig;
+  interface    axm_ddrd =    axm_ddrd_sig;
+  interface    tx_north =    ifc.tx_north;
+  interface    rx_north =    ifc.rx_north;
+  interface     tx_east =     ifc.tx_east;
+  interface     rx_east =     ifc.rx_east;
+  interface    tx_south =    ifc.tx_south;
+  interface    rx_south =    ifc.rx_south;
+  interface     tx_west =     ifc.tx_west;
+  interface     rx_west =     ifc.rx_west;
+  interface        irqs =        ifc.irqs;
 endmodule
 
 // Concrete parameters definitions
@@ -510,7 +549,9 @@ typedef DE10Pro_bsv_shell #( `H2F_LW_ADDR
                            , `DRAM_WUSER
                            , `DRAM_BUSER
                            , `DRAM_ARUSER
-                           , `DRAM_RUSER ) ConcreteDE10Pro_bsv_shell;
+                           , `DRAM_RUSER
+                           , Bit #(0)
+                           , Bit #(0) ) ConcreteDE10Pro_bsv_shell;
 
 typedef DE10Pro_bsv_shell_Sig #( `H2F_LW_ADDR
                                , `H2F_LW_DATA
@@ -558,18 +599,28 @@ typedef DE10Pro_bsv_shell_Sig #( `H2F_LW_ADDR
                                , `DRAM_WUSER
                                , `DRAM_BUSER
                                , `DRAM_ARUSER
-                               , `DRAM_RUSER ) ConcreteDE10Pro_bsv_shell_Sig;
+                               , `DRAM_RUSER
+                               , Bit #(0)
+                               , Bit #(0) ) ConcreteDE10Pro_bsv_shell_Sig;
 
 // trivial examples
 // ----------------
 
 module mkDummyDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
-  interface axls_h2f_lw = culDeSac;
-  interface axs_h2f = culDeSac;
-  interface axm_f2h = culDeSac;
-  interface axm_ddrb = culDeSac;
-  interface axm_ddrc = culDeSac;
-  interface axm_ddrd = culDeSac;
+  interface axls_h2f_lw =   culDeSac;
+  interface     axs_h2f =   culDeSac;
+  interface     axm_f2h =   culDeSac;
+  interface    axm_ddrb =   culDeSac;
+  interface    axm_ddrc =   culDeSac;
+  interface    axm_ddrd =   culDeSac;
+  interface    tx_north = nullSource;
+  interface    rx_north =   nullSink;
+  interface     tx_east = nullSource;
+  interface     rx_east =   nullSink;
+  interface    tx_south = nullSource;
+  interface    rx_south =   nullSink;
+  interface     tx_west = nullSource;
+  interface     rx_west =   nullSink;
   interface irqs = replicate (noIrq);
 endmodule
 
@@ -604,11 +655,19 @@ module mkPassThroughToDRAMDE10Pro_bsv_shell (ConcreteDE10Pro_bsv_shell);
               , `H2F_LW_RUSER )
     alwaysDeadBeef <- mkPerpetualValueAXI4Slave ('hdeadbeef);
   interface axls_h2f_lw = fromAXI4ToAXI4Lite_Slave (alwaysDeadBeef);
-  interface axs_h2f = ddrShim.slave;
-  interface axm_f2h = culDeSac;
-  interface axm_ddrb = ddrbShim.master;
-  interface axm_ddrc = ddrcShim.master;
-  interface axm_ddrd = ddrdShim.master;
+  interface     axs_h2f = ddrShim.slave;
+  interface     axm_f2h = culDeSac;
+  interface    axm_ddrb = ddrbShim.master;
+  interface    axm_ddrc = ddrcShim.master;
+  interface    axm_ddrd = ddrdShim.master;
+  interface    tx_north = nullSource;
+  interface    rx_north =   nullSink;
+  interface     tx_east = nullSource;
+  interface     rx_east =   nullSink;
+  interface    tx_south = nullSource;
+  interface    rx_south =   nullSink;
+  interface     tx_west = nullSource;
+  interface     rx_west =   nullSink;
   interface irqs = replicate (noIrq);
 endmodule
 

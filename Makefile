@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2021 Alexandre Joannou
+# Copyright (c) 2021-2022 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -28,18 +28,24 @@
 
 SRCS  = DE10Pro_bsv_shell.bsv
 
-BLUESTUFFDIR = ./BlueStuff
+BLUESTUFFDIR = $(CURDIR)/BlueStuff
+BLUEAXI4DIR = $(BLUESTUFFDIR)/BlueAXI4
+BLUEAXI4DIRS = $(BLUEAXI4DIR):$(BLUEAXI4DIR)/AXI4:$(BLUEAXI4DIR)/AXI4Lite:$(BLUEAXI4DIR)/AXI4Stream:$(BLUEAXI4DIR)/BlueUnixBridges
 BLUEBASICSDIR = $(BLUESTUFFDIR)/BlueBasics
-AXIDIR = $(BLUESTUFFDIR)/AXI
+BLUEUTILSDIR = $(BLUESTUFFDIR)/BlueUtils
 
 # generated files directories
-BUILDDIR = build
-BDIR = $(BUILDDIR)/bdir
+BDIR = $(CURDIR)/bdir
+VDIR = $(CURDIR)/vdir
+SIMDIR = $(CURDIR)/simdir
 
 BSC = bsc
-BSVPATH = +:$(BLUESTUFFDIR):$(AXIDIR):$(BLUEBASICSDIR):$(BLUEUTILSDIR)
+BSVPATH = +:$(BLUESTUFFDIR):$(BLUEAXI4DIRS):$(BLUEBASICSDIR):$(BLUEUTILSDIR)
 BSCFLAGS = -p $(BSVPATH)
 BSCFLAGS += -bdir $(BDIR)
+BSCFLAGS += -vdir $(VDIR)
+BSCFLAGS += -simdir $(SIMDIR)
+BSCFLAGS += -suppress-warnings T0127:S0080 # no orphan typeclass warning
 #BSCFLAGS += +RTS -K512M -RTS
 #BSCFLAGS += -show-schedule
 #BSCFLAGS += -sched-dot
@@ -51,17 +57,19 @@ BSCFLAGS += -bdir $(BDIR)
 #all: mkDummyDE10Pro_bsv_shell_Sig.v mkPassThroughToDRAMDE10Pro_bsv_shell_Sig.v
 
 mkPassThroughToDRAMDE10Pro_bsv_shell_Sig.v: $(SRCS)
-	mkdir -p $(BDIR)
+	mkdir -p $(BDIR) $(VDIR) $(SIMDIR)
 	$(BSC) $(BSCFLAGS) -verilog -g mkPassThroughToDRAMDE10Pro_bsv_shell_Sig -u DE10Pro_bsv_shell.bsv
 
 mkDummyDE10Pro_bsv_shell_Sig.v: $(SRCS)
-	mkdir -p $(BDIR)
+	mkdir -p $(BDIR) $(VDIR) $(SIMDIR)
 	$(BSC) $(BSCFLAGS) -verilog -g mkDummyDE10Pro_bsv_shell_Sig -u DE10Pro_bsv_shell.bsv
 
 .PHONY: clean mrproper
 
 clean:
-	rm -f -r $(BUILDDIR)
+	rm -f -r $(BDIR)
+	rm -f -r $(VDIR)
+	rm -f -r $(SIMDIR)
 
 mrproper: clean
 	rm -f -r *.v
