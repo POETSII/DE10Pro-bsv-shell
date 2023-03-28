@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2021-2022 Alexandre Joannou
+ * Copyright (c) 2021-2023 Alexandre Joannou
  * All rights reserved.
  *
  * This material is based upon work supported by the DoD Information Analysis
@@ -306,14 +306,22 @@ interface DE10Pro_bsv_shell_Sig #(
                              , t_ddrd_ruser ) axm_ddrd;
   // High Speed Links
   // ----------------
-  interface Source #(t_link_tx) tx_north;
-  interface   Sink #(t_link_rx) rx_north;
-  interface Source #(t_link_tx)  tx_east;
-  interface   Sink #(t_link_rx)  rx_east;
-  interface Source #(t_link_tx) tx_south;
-  interface   Sink #(t_link_rx) rx_south;
-  interface Source #(t_link_tx)  tx_west;
-  interface   Sink #(t_link_rx)  rx_west;
+  (* prefix = "cis_tx_north" *)
+  interface Source_Sig #(t_link_tx) tx_north;
+  (* prefix = "cie_rx_north" *)
+  interface   Sink_Sig #(t_link_rx) rx_north;
+  (* prefix = "cis_tx_east" *)
+  interface Source_Sig #(t_link_tx)  tx_east;
+  (* prefix = "cie_rx_east" *)
+  interface   Sink_Sig #(t_link_rx)  rx_east;
+  (* prefix = "cis_tx_south" *)
+  interface Source_Sig #(t_link_tx) tx_south;
+  (* prefix = "cie_rx_south" *)
+  interface   Sink_Sig #(t_link_rx) rx_south;
+  (* prefix = "cis_tx_west" *)
+  interface Source_Sig #(t_link_tx)  tx_west;
+  (* prefix = "cie_rx_west" *)
+  interface   Sink_Sig #(t_link_rx)  rx_west;
   // Interrupt sender interface
   // --------------------------
   (* prefix = "ins" *)
@@ -437,27 +445,36 @@ module toDE10Pro_bsv_shell_Sig #(
                           , t_ddrd_ruser
                           // High Speed Links parameters
                           , t_link_tx
-                          , t_link_rx ));
+                          , t_link_rx ))
+  provisos (Bits #(t_link_tx, _tx_sz), Bits #(t_link_rx, _rx_sz));
   let axls_h2f_lw_sig <- toAXI4Lite_Slave_Sig (ifc.axls_h2f_lw);
   let axs_h2f_sig     <-         toAXI4_Slave_Sig (ifc.axs_h2f);
   let axm_f2h_sig     <-        toAXI4_Master_Sig (ifc.axm_f2h);
   let axm_ddrb_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrb);
   let axm_ddrc_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrc);
   let axm_ddrd_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrd);
+  let tx_north_sig    <-            toSource_Sig (ifc.tx_north);
+  let rx_north_sig    <-              toSink_Sig (ifc.rx_north);
+  let tx_east_sig     <-             toSource_Sig (ifc.tx_east);
+  let rx_east_sig     <-               toSink_Sig (ifc.rx_east);
+  let tx_south_sig    <-            toSource_Sig (ifc.tx_south);
+  let rx_south_sig    <-              toSink_Sig (ifc.rx_south);
+  let tx_west_sig     <-             toSource_Sig (ifc.tx_west);
+  let rx_west_sig     <-               toSink_Sig (ifc.rx_west);
   interface axls_h2f_lw = axls_h2f_lw_sig;
   interface     axs_h2f =     axs_h2f_sig;
   interface     axm_f2h =     axm_f2h_sig;
   interface    axm_ddrb =    axm_ddrb_sig;
   interface    axm_ddrc =    axm_ddrc_sig;
   interface    axm_ddrd =    axm_ddrd_sig;
-  interface    tx_north =    ifc.tx_north;
-  interface    rx_north =    ifc.rx_north;
-  interface     tx_east =     ifc.tx_east;
-  interface     rx_east =     ifc.rx_east;
-  interface    tx_south =    ifc.tx_south;
-  interface    rx_south =    ifc.rx_south;
-  interface     tx_west =     ifc.tx_west;
-  interface     rx_west =     ifc.rx_west;
+  interface    tx_north =    tx_north_sig;
+  interface    rx_north =    rx_north_sig;
+  interface     tx_east =     tx_east_sig;
+  interface     rx_east =     rx_east_sig;
+  interface    tx_south =    tx_south_sig;
+  interface    rx_south =    rx_south_sig;
+  interface     tx_west =     tx_west_sig;
+  interface     rx_west =     rx_west_sig;
   interface        irqs =        ifc.irqs;
 endmodule
 
@@ -607,20 +624,28 @@ typedef DE10Pro_bsv_shell_Sig #( `H2F_LW_ADDR
 // ----------------
 
 module mkDummyDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
-  interface axls_h2f_lw =   culDeSac;
-  interface     axs_h2f =   culDeSac;
-  interface     axm_f2h =   culDeSac;
-  interface    axm_ddrb =   culDeSac;
-  interface    axm_ddrc =   culDeSac;
-  interface    axm_ddrd =   culDeSac;
-  interface    tx_north = nullSource;
-  interface    rx_north =   nullSink;
-  interface     tx_east = nullSource;
-  interface     rx_east =   nullSink;
-  interface    tx_south = nullSource;
-  interface    rx_south =   nullSink;
-  interface     tx_west = nullSource;
-  interface     rx_west =   nullSink;
+  let dummy_tx_north <- toSource_Sig (nullSource);
+  let dummy_rx_north <-     toSink_Sig (nullSink);
+  let dummy_tx_east  <- toSource_Sig (nullSource);
+  let dummy_rx_east  <-     toSink_Sig (nullSink);
+  let dummy_tx_south <- toSource_Sig (nullSource);
+  let dummy_rx_south <-     toSink_Sig (nullSink);
+  let dummy_tx_west  <- toSource_Sig (nullSource);
+  let dummy_rx_west  <-     toSink_Sig (nullSink);
+  interface axls_h2f_lw =       culDeSac;
+  interface     axs_h2f =       culDeSac;
+  interface     axm_f2h =       culDeSac;
+  interface    axm_ddrb =       culDeSac;
+  interface    axm_ddrc =       culDeSac;
+  interface    axm_ddrd =       culDeSac;
+  interface    tx_north = dummy_tx_north;
+  interface    rx_north = dummy_rx_north;
+  interface     tx_east =  dummy_tx_east;
+  interface     rx_east =  dummy_rx_east;
+  interface    tx_south = dummy_tx_south;
+  interface    rx_south = dummy_rx_south;
+  interface     tx_west =  dummy_tx_west;
+  interface     rx_west =  dummy_rx_west;
   interface irqs = replicate (noIrq);
 endmodule
 
