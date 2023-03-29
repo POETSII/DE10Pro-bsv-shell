@@ -45,6 +45,13 @@ interface Irq;
   method Bool _read;
 endinterface
 
+instance Bits #(Irq, 1);
+  function pack (irq) = pack (irq._read);
+  function unpack (x) = interface Irq;
+    method _read = (x == 1'h0) ? False : True;
+  endinterface;
+endinstance
+
 Irq noIrq = interface Irq; method _read = False; endinterface;
 
 /////////////////////////////////////
@@ -324,9 +331,9 @@ interface DE10Pro_bsv_shell_Sig #(
   interface   Sink_Sig #(t_link_rx)  rx_west;
   // Interrupt sender interface
   // --------------------------
-  (* prefix = "ins" *)
+  (* result = "ins_irqs" *)
   (* always_ready, always_enabled *)
-  interface Vector #(32, Irq) irqs;
+  method Bit #(32) irqs;
 endinterface
 
 ////////////////////////////////
@@ -475,7 +482,7 @@ module toDE10Pro_bsv_shell_Sig #(
   interface    rx_south =    rx_south_sig;
   interface     tx_west =     tx_west_sig;
   interface     rx_west =     rx_west_sig;
-  interface        irqs =        ifc.irqs;
+  method irqs = pack (ifc.irqs);
 endmodule
 
 // Concrete parameters definitions
@@ -646,7 +653,7 @@ module mkDummyDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
   interface    rx_south = dummy_rx_south;
   interface     tx_west =  dummy_tx_west;
   interface     rx_west =  dummy_rx_west;
-  interface irqs = replicate (noIrq);
+  interface irqs = 0;
 endmodule
 
 module mkPassThroughToDRAMDE10Pro_bsv_shell (ConcreteDE10Pro_bsv_shell);
