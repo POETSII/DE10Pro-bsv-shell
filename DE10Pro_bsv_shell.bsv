@@ -377,19 +377,13 @@ interface DE10Pro_bsv_shell_Sig_Avalon #(`DEF_TYPE_PARAMS);
                              , t_f2h_ruser ) axm_f2h;
   // DDRB Avalon port
   // ----------------
-  interface AvalonMasterIfc #(
-    TSub #(t_ddrb_addr, TLog #(TDiv #(t_ddrb_data, 8)))
-  , t_ddrb_data ) avm_ddrb;
+  interface AvalonHost #(t_ddrb_addr, t_ddrb_data) avm_ddrb;
   // DDRC Avalon port
   // ----------------
-  interface AvalonMasterIfc #(
-    TSub #(t_ddrc_addr, TLog #(TDiv #(t_ddrc_data, 8)))
-  , t_ddrc_data ) avm_ddrc;
+  interface AvalonHost #(t_ddrc_addr, t_ddrc_data) avm_ddrc;
   // DDRD Avalon port
   // ----------------
-  interface AvalonMasterIfc #(
-    TSub #(t_ddrd_addr, TLog #(TDiv #(t_ddrd_data, 8)))
-  , t_ddrd_data ) avm_ddrd;
+  interface AvalonHost #(t_ddrd_addr, t_ddrd_data) avm_ddrd;
   // High Speed Links
   // ----------------
   (* prefix = "cis_tx_north" *)
