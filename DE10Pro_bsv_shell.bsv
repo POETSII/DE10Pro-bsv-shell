@@ -377,13 +377,13 @@ interface DE10Pro_bsv_shell_Sig_Avalon #(`DEF_TYPE_PARAMS);
                              , t_f2h_ruser ) axm_f2h;
   // DDRB Avalon port
   // ----------------
-  interface AvalonHost #(t_ddrb_addr, t_ddrb_data) avm_ddrb;
+  interface AvalonMMHost #(t_ddrb_addr, t_ddrb_data) avm_ddrb;
   // DDRC Avalon port
   // ----------------
-  interface AvalonHost #(t_ddrc_addr, t_ddrc_data) avm_ddrc;
+  interface AvalonMMHost #(t_ddrc_addr, t_ddrc_data) avm_ddrc;
   // DDRD Avalon port
   // ----------------
-  interface AvalonHost #(t_ddrd_addr, t_ddrd_data) avm_ddrd;
+  interface AvalonMMHost #(t_ddrd_addr, t_ddrd_data) avm_ddrd;
   // High Speed Links
   // ----------------
   (* prefix = "cis_tx_north" *)
@@ -457,9 +457,9 @@ module toDE10Pro_bsv_shell_Sig_Avalon #(DE10Pro_bsv_shell #(`TYPE_PARAMS) ifc)
   let axls_h2f_lw_sig <- toAXI4Lite_Slave_Sig (ifc.axls_h2f_lw);
   let axs_h2f_sig     <-         toAXI4_Slave_Sig (ifc.axs_h2f);
   let axm_f2h_sig     <-        toAXI4_Master_Sig (ifc.axm_f2h);
-  let avm_ddrb_sig    <- mkAXI4Manager_to_AvalonHost (ifc.axm_ddrb);
-  let avm_ddrc_sig    <- mkAXI4Manager_to_AvalonHost (ifc.axm_ddrc);
-  let avm_ddrd_sig    <- mkAXI4Manager_to_AvalonHost (ifc.axm_ddrd);
+  let avm_ddrb_sig    <- mkAXI4Manager_to_AvalonMMHost (ifc.axm_ddrb);
+  let avm_ddrc_sig    <- mkAXI4Manager_to_AvalonMMHost (ifc.axm_ddrc);
+  let avm_ddrd_sig    <- mkAXI4Manager_to_AvalonMMHost (ifc.axm_ddrd);
   let tx_north_sig    <-            toSource_Sig (ifc.tx_north);
   let rx_north_sig    <-              toSink_Sig (ifc.rx_north);
   let tx_east_sig     <-             toSource_Sig (ifc.tx_east);
