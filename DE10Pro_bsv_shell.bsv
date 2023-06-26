@@ -452,8 +452,11 @@ module toDE10Pro_bsv_shell_Sig_Avalon #(DE10Pro_bsv_shell #(`TYPE_PARAMS) ifc)
   provisos ( Bits #(t_link_tx, _tx_sz)
            , Bits #(t_link_rx, _rx_sz)
            , Add #(_a, SizeOf #(AXI4_Len), t_ddrb_addr)
-           , Add #(_b, SizeOf #(AXI4_Len), t_ddrc_addr)
-           , Add #(_c, SizeOf #(AXI4_Len), t_ddrd_addr) );
+           , Add #(_b, TLog #(TDiv #(t_ddrb_data, 8)), t_ddrb_addr)
+           , Add #(_c, SizeOf #(AXI4_Len), t_ddrc_addr)
+           , Add #(_d, TLog #(TDiv #(t_ddrc_data, 8)), t_ddrc_addr)
+           , Add #(_e, SizeOf #(AXI4_Len), t_ddrd_addr)
+           , Add #(_f, TLog #(TDiv #(t_ddrd_data, 8)), t_ddrd_addr) );
   let axls_h2f_lw_sig <- toAXI4Lite_Slave_Sig (ifc.axls_h2f_lw);
   let axs_h2f_sig     <-         toAXI4_Slave_Sig (ifc.axs_h2f);
   let axm_f2h_sig     <-        toAXI4_Master_Sig (ifc.axm_f2h);
