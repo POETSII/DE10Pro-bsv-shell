@@ -75,6 +75,22 @@ Defined similarly to <<DDRB>>.
 
 Defined similarly to <<DDRB>>.
 
+=== TX / RX links
+
+[code,bsv]
+------------
+interface Source #(t_link_tx) tx_north;
+interface   Sink #(t_link_rx) rx_north;
+interface Source #(t_link_tx)  tx_east;
+interface   Sink #(t_link_rx)  rx_east;
+interface Source #(t_link_tx) tx_south;
+interface   Sink #(t_link_rx) rx_south;
+interface Source #(t_link_tx)  tx_west;
+interface   Sink #(t_link_rx)  rx_west;
+------------
+
+TX and RX link to be routed to the external links of the DE10.
+
 === Interrupts
 
 [code,bsv]
