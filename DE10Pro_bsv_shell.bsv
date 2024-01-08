@@ -112,9 +112,15 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_ddrd_buser \
 , numeric type t_ddrd_aruser \
 , numeric type t_ddrd_ruser \
-/* High Speed Links */ \
-, type t_link_tx \
-, type t_link_rx
+// High Speed Links AXI4Stream parameters \
+, numeric type t_tx_id \
+, numeric type t_tx_data \
+, numeric type t_tx_dest \
+, numeric type t_tx_user \
+, numeric type t_rx_id \
+, numeric type t_rx_data \
+, numeric type t_rx_dest \
+, numeric type t_rx_user
 
 `define TYPE_PARAMS \
   t_h2f_lw_addr \
@@ -169,9 +175,15 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , t_ddrd_buser \
 , t_ddrd_aruser \
 , t_ddrd_ruser \
-/* High Speed Links parameters */ \
-, t_link_tx \
-, t_link_rx
+// High Speed Links AXI4Stream parameters \
+, t_tx_id \
+, t_tx_data \
+, t_tx_dest \
+, t_tx_user \
+, t_rx_id \
+, t_rx_data \
+, t_rx_dest \
+, t_rx_user
 
 /////////////////////////////////////
 // "non sig in-bluespec" interface //
@@ -239,14 +251,38 @@ interface DE10Pro_bsv_shell #(`DEF_TYPE_PARAMS);
                          , t_ddrd_ruser ) axm_ddrd;
   // High Speed Links
   // ----------------
-  interface Source #(t_link_tx) tx_north;
-  interface   Sink #(t_link_rx) rx_north;
-  interface Source #(t_link_tx)  tx_east;
-  interface   Sink #(t_link_rx)  rx_east;
-  interface Source #(t_link_tx) tx_south;
-  interface   Sink #(t_link_rx) rx_south;
-  interface Source #(t_link_tx)  tx_west;
-  interface   Sink #(t_link_rx)  rx_west;
+  interface AXI4Stream_Master #( t_tx_id
+                               , t_tx_data
+                               , t_tx_dest
+                               , t_tx_user) tx_north;
+  interface AXI4Stream_Slave #( t_rx_id
+                              , t_rx_data
+                              , t_rx_dest
+                              , t_rx_user) rx_north;
+  interface AXI4Stream_Master #( t_tx_id
+                               , t_tx_data
+                               , t_tx_dest
+                               , t_tx_user) tx_east;
+  interface AXI4Stream_Slave #( t_rx_id
+                              , t_rx_data
+                              , t_rx_dest
+                              , t_rx_user) rx_east;
+  interface AXI4Stream_Master #( t_tx_id
+                               , t_tx_data
+                               , t_tx_dest
+                               , t_tx_user) tx_south;
+  interface AXI4Stream_Slave #( t_rx_id
+                              , t_rx_data
+                              , t_rx_dest
+                              , t_rx_user) rx_south;
+  interface AXI4Stream_Master #( t_tx_id
+                               , t_tx_data
+                               , t_tx_dest
+                               , t_tx_user) tx_west;
+  interface AXI4Stream_Slave #( t_rx_id
+                              , t_rx_data
+                              , t_rx_dest
+                              , t_rx_user) rx_west;
   // Interrupt sender interface
   // --------------------------
   interface Vector #(32, Irq) irqs;
@@ -318,22 +354,38 @@ interface DE10Pro_bsv_shell_Sig #(`DEF_TYPE_PARAMS);
                              , t_ddrd_ruser ) axm_ddrd;
   // High Speed Links
   // ----------------
-  (* prefix = "cis_tx_north" *)
-  interface Source_Sig #(t_link_tx) tx_north;
-  (* prefix = "cie_rx_north" *)
-  interface   Sink_Sig #(t_link_rx) rx_north;
-  (* prefix = "cis_tx_east" *)
-  interface Source_Sig #(t_link_tx)  tx_east;
-  (* prefix = "cie_rx_east" *)
-  interface   Sink_Sig #(t_link_rx)  rx_east;
-  (* prefix = "cis_tx_south" *)
-  interface Source_Sig #(t_link_tx) tx_south;
-  (* prefix = "cie_rx_south" *)
-  interface   Sink_Sig #(t_link_rx) rx_south;
-  (* prefix = "cis_tx_west" *)
-  interface Source_Sig #(t_link_tx)  tx_west;
-  (* prefix = "cie_rx_west" *)
-  interface   Sink_Sig #(t_link_rx)  rx_west;
+  interface AXI4Stream_Master_Sig #( t_tx_id
+                                   , t_tx_data
+                                   , t_tx_dest
+                                   , t_tx_user) tx_north;
+  interface AXI4Stream_Slave_Sig #( t_rx_id
+                                  , t_rx_data
+                                  , t_rx_dest
+                                  , t_rx_user) rx_north;
+  interface AXI4Stream_Master_Sig #( t_tx_id
+                                   , t_tx_data
+                                   , t_tx_dest
+                                   , t_tx_user) tx_east;
+  interface AXI4Stream_Slave_Sig #( t_rx_id
+                                  , t_rx_data
+                                  , t_rx_dest
+                                  , t_rx_user) rx_east;
+  interface AXI4Stream_Master_Sig #( t_tx_id
+                                   , t_tx_data
+                                   , t_tx_dest
+                                   , t_tx_user) tx_south;
+  interface AXI4Stream_Slave_Sig #( t_rx_id
+                                  , t_rx_data
+                                  , t_rx_dest
+                                  , t_rx_user) rx_south;
+  interface AXI4Stream_Master_Sig #( t_tx_id
+                                   , t_tx_data
+                                   , t_tx_dest
+                                   , t_tx_user) tx_west;
+  interface AXI4Stream_Slave_Sig #( t_rx_id
+                                  , t_rx_data
+                                  , t_rx_dest
+                                  , t_rx_user) rx_west;
   // Interrupt sender interface
   // --------------------------
   (* result = "ins_irqs" *)
@@ -386,22 +438,38 @@ interface DE10Pro_bsv_shell_Sig_Avalon #(`DEF_TYPE_PARAMS);
   interface PipelinedAvalonMMHost #(t_ddrd_addr, t_ddrd_data) avm_ddrd;
   // High Speed Links
   // ----------------
-  (* prefix = "cis_tx_north" *)
-  interface Source_Sig #(t_link_tx) tx_north;
-  (* prefix = "cie_rx_north" *)
-  interface   Sink_Sig #(t_link_rx) rx_north;
-  (* prefix = "cis_tx_east" *)
-  interface Source_Sig #(t_link_tx)  tx_east;
-  (* prefix = "cie_rx_east" *)
-  interface   Sink_Sig #(t_link_rx)  rx_east;
-  (* prefix = "cis_tx_south" *)
-  interface Source_Sig #(t_link_tx) tx_south;
-  (* prefix = "cie_rx_south" *)
-  interface   Sink_Sig #(t_link_rx) rx_south;
-  (* prefix = "cis_tx_west" *)
-  interface Source_Sig #(t_link_tx)  tx_west;
-  (* prefix = "cie_rx_west" *)
-  interface   Sink_Sig #(t_link_rx)  rx_west;
+  interface AXI4Stream_Master_Sig #( t_tx_id
+                                   , t_tx_data
+                                   , t_tx_dest
+                                   , t_tx_user) tx_north;
+  interface AXI4Stream_Slave_Sig #( t_rx_id
+                                  , t_rx_data
+                                  , t_rx_dest
+                                  , t_rx_user) rx_north;
+  interface AXI4Stream_Master_Sig #( t_tx_id
+                                   , t_tx_data
+                                   , t_tx_dest
+                                   , t_tx_user) tx_east;
+  interface AXI4Stream_Slave_Sig #( t_rx_id
+                                  , t_rx_data
+                                  , t_rx_dest
+                                  , t_rx_user) rx_east;
+  interface AXI4Stream_Master_Sig #( t_tx_id
+                                   , t_tx_data
+                                   , t_tx_dest
+                                   , t_tx_user) tx_south;
+  interface AXI4Stream_Slave_Sig #( t_rx_id
+                                  , t_rx_data
+                                  , t_rx_dest
+                                  , t_rx_user) rx_south;
+  interface AXI4Stream_Master_Sig #( t_tx_id
+                                   , t_tx_data
+                                   , t_tx_dest
+                                   , t_tx_user) tx_west;
+  interface AXI4Stream_Slave_Sig #( t_rx_id
+                                  , t_rx_data
+                                  , t_rx_dest
+                                  , t_rx_user) rx_west;
   // Interrupt sender interface
   // --------------------------
   (* result = "ins_irqs" *)
@@ -414,22 +482,21 @@ endinterface
 ////////////////////////////////////////////////////////////////////////////////
 
 module toDE10Pro_bsv_shell_Sig #(DE10Pro_bsv_shell #(`TYPE_PARAMS) ifc)
-                                (DE10Pro_bsv_shell_Sig #(`TYPE_PARAMS))
-  provisos (Bits #(t_link_tx, _tx_sz), Bits #(t_link_rx, _rx_sz));
+                                (DE10Pro_bsv_shell_Sig #(`TYPE_PARAMS));
   let axls_h2f_lw_sig <- toAXI4Lite_Slave_Sig (ifc.axls_h2f_lw);
   let axs_h2f_sig     <-         toAXI4_Slave_Sig (ifc.axs_h2f);
   let axm_f2h_sig     <-        toAXI4_Master_Sig (ifc.axm_f2h);
   let axm_ddrb_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrb);
   let axm_ddrc_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrc);
   let axm_ddrd_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrd);
-  let tx_north_sig    <-            toSource_Sig (ifc.tx_north);
-  let rx_north_sig    <-              toSink_Sig (ifc.rx_north);
-  let tx_east_sig     <-             toSource_Sig (ifc.tx_east);
-  let rx_east_sig     <-               toSink_Sig (ifc.rx_east);
-  let tx_south_sig    <-            toSource_Sig (ifc.tx_south);
-  let rx_south_sig    <-              toSink_Sig (ifc.rx_south);
-  let tx_west_sig     <-             toSource_Sig (ifc.tx_west);
-  let rx_west_sig     <-               toSink_Sig (ifc.rx_west);
+  let tx_north_sig    <- toAXI4Stream_Master_Sig (ifc.tx_north);
+  let rx_north_sig    <-  toAXI4Stream_Slave_Sig (ifc.rx_north);
+  let tx_east_sig     <-  toAXI4Stream_Master_Sig (ifc.tx_east);
+  let rx_east_sig     <-   toAXI4Stream_Slave_Sig (ifc.rx_east);
+  let tx_south_sig    <- toAXI4Stream_Master_Sig (ifc.tx_south);
+  let rx_south_sig    <-  toAXI4Stream_Slave_Sig (ifc.rx_south);
+  let tx_west_sig     <-  toAXI4Stream_Master_Sig (ifc.tx_west);
+  let rx_west_sig     <-   toAXI4Stream_Slave_Sig (ifc.rx_west);
   interface axls_h2f_lw = axls_h2f_lw_sig;
   interface     axs_h2f =     axs_h2f_sig;
   interface     axm_f2h =     axm_f2h_sig;
@@ -449,9 +516,7 @@ endmodule
 
 module toDE10Pro_bsv_shell_Sig_Avalon #(DE10Pro_bsv_shell #(`TYPE_PARAMS) ifc)
   (DE10Pro_bsv_shell_Sig_Avalon #(`TYPE_PARAMS))
-  provisos ( Bits #(t_link_tx, _tx_sz)
-           , Bits #(t_link_rx, _rx_sz)
-           , Add #(_a, SizeOf #(AXI4_Len), t_ddrb_addr)
+  provisos ( Add #(_a, SizeOf #(AXI4_Len), t_ddrb_addr)
            , Add #(_b, TLog #(TDiv #(t_ddrb_data, 8)), t_ddrb_addr)
            , Add #(_c, SizeOf #(AXI4_Len), t_ddrc_addr)
            , Add #(_d, TLog #(TDiv #(t_ddrc_data, 8)), t_ddrc_addr)
@@ -463,14 +528,14 @@ module toDE10Pro_bsv_shell_Sig_Avalon #(DE10Pro_bsv_shell #(`TYPE_PARAMS) ifc)
   let avm_ddrb_sig    <- mkAXI4Manager_to_PipelinedAvalonMMHost (ifc.axm_ddrb);
   let avm_ddrc_sig    <- mkAXI4Manager_to_PipelinedAvalonMMHost (ifc.axm_ddrc);
   let avm_ddrd_sig    <- mkAXI4Manager_to_PipelinedAvalonMMHost (ifc.axm_ddrd);
-  let tx_north_sig    <-            toSource_Sig (ifc.tx_north);
-  let rx_north_sig    <-              toSink_Sig (ifc.rx_north);
-  let tx_east_sig     <-             toSource_Sig (ifc.tx_east);
-  let rx_east_sig     <-               toSink_Sig (ifc.rx_east);
-  let tx_south_sig    <-            toSource_Sig (ifc.tx_south);
-  let rx_south_sig    <-              toSink_Sig (ifc.rx_south);
-  let tx_west_sig     <-             toSource_Sig (ifc.tx_west);
-  let rx_west_sig     <-               toSink_Sig (ifc.rx_west);
+  let tx_north_sig    <- toAXI4Stream_Master_Sig (ifc.tx_north);
+  let rx_north_sig    <-  toAXI4Stream_Slave_Sig (ifc.rx_north);
+  let tx_east_sig     <-  toAXI4Stream_Master_Sig (ifc.tx_east);
+  let rx_east_sig     <-   toAXI4Stream_Slave_Sig (ifc.rx_east);
+  let tx_south_sig    <- toAXI4Stream_Master_Sig (ifc.tx_south);
+  let rx_south_sig    <-  toAXI4Stream_Slave_Sig (ifc.rx_south);
+  let tx_west_sig     <-  toAXI4Stream_Master_Sig (ifc.tx_west);
+  let rx_west_sig     <-   toAXI4Stream_Slave_Sig (ifc.rx_west);
   interface axls_h2f_lw = axls_h2f_lw_sig;
   interface     axs_h2f =     axs_h2f_sig;
   interface     axm_f2h =     axm_f2h_sig;
@@ -531,6 +596,13 @@ endmodule
 `define DRAM_ARUSER   0
 `define DRAM_RUSER    0
 
+// High speed links AXI4Stream parameters
+
+`define HS_ID         0
+`define HS_DATA     512
+`define HS_DEST       0
+`define HS_USER       9
+
 `define CONCRETE_PARAMS \
   `H2F_LW_ADDR \
 , `H2F_LW_DATA \
@@ -579,8 +651,14 @@ endmodule
 , `DRAM_BUSER \
 , `DRAM_ARUSER \
 , `DRAM_RUSER \
-, Bit #(512) \
-, Bit #(512)
+, `HS_ID \
+, `HS_DATA \
+, `HS_DEST \
+, `HS_USER \
+, `HS_ID \
+, `HS_DATA \
+, `HS_DEST \
+, `HS_USER
 
 typedef DE10Pro_bsv_shell #(`CONCRETE_PARAMS)
   ConcreteDE10Pro_bsv_shell;
@@ -656,28 +734,20 @@ module mkPassThroughToDRAMDE10Pro_bsv_shell_Sig_Avalon
 endmodule
 
 module mkDummyDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
-  let dummy_tx_north <- toSource_Sig (nullSource);
-  let dummy_rx_north <-     toSink_Sig (nullSink);
-  let dummy_tx_east  <- toSource_Sig (nullSource);
-  let dummy_rx_east  <-     toSink_Sig (nullSink);
-  let dummy_tx_south <- toSource_Sig (nullSource);
-  let dummy_rx_south <-     toSink_Sig (nullSink);
-  let dummy_tx_west  <- toSource_Sig (nullSource);
-  let dummy_rx_west  <-     toSink_Sig (nullSink);
-  interface axls_h2f_lw =       culDeSac;
-  interface     axs_h2f =       culDeSac;
-  interface     axm_f2h =       culDeSac;
-  interface    axm_ddrb =       culDeSac;
-  interface    axm_ddrc =       culDeSac;
-  interface    axm_ddrd =       culDeSac;
-  interface    tx_north = dummy_tx_north;
-  interface    rx_north = dummy_rx_north;
-  interface     tx_east =  dummy_tx_east;
-  interface     rx_east =  dummy_rx_east;
-  interface    tx_south = dummy_tx_south;
-  interface    rx_south = dummy_rx_south;
-  interface     tx_west =  dummy_tx_west;
-  interface     rx_west =  dummy_rx_west;
+  interface axls_h2f_lw = culDeSac;
+  interface     axs_h2f = culDeSac;
+  interface     axm_f2h = culDeSac;
+  interface    axm_ddrb = culDeSac;
+  interface    axm_ddrc = culDeSac;
+  interface    axm_ddrd = culDeSac;
+  interface    tx_north = culDeSac;
+  interface    rx_north = culDeSac;
+  interface     tx_east = culDeSac;
+  interface     rx_east = culDeSac;
+  interface    tx_south = culDeSac;
+  interface    rx_south = culDeSac;
+  interface     tx_west = culDeSac;
+  interface     rx_west = culDeSac;
   interface irqs = 0;
 endmodule
 
