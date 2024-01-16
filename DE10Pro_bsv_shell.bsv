@@ -112,7 +112,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_ddrd_buser \
 , numeric type t_ddrd_aruser \
 , numeric type t_ddrd_ruser \
-// High Speed Links AXI4Stream parameters \
+/* High Speed Links AXI4Stream parameters */ \
 , numeric type t_tx_id \
 , numeric type t_tx_data \
 , numeric type t_tx_dest \
@@ -123,6 +123,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_rx_user
 
 `define TYPE_PARAMS \
+/* Light-weight HPS to FPGA AXI port parameters */ \
   t_h2f_lw_addr \
 , t_h2f_lw_data \
 , t_h2f_lw_awuser \
@@ -175,7 +176,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , t_ddrd_buser \
 , t_ddrd_aruser \
 , t_ddrd_ruser \
-// High Speed Links AXI4Stream parameters \
+/* High Speed Links AXI4Stream parameters */ \
 , t_tx_id \
 , t_tx_data \
 , t_tx_dest \
@@ -601,7 +602,7 @@ endmodule
 `define HS_ID         0
 `define HS_DATA     512
 `define HS_DEST       0
-`define HS_USER       9
+`define HS_USER       0
 
 `define CONCRETE_PARAMS \
   `H2F_LW_ADDR \
