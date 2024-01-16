@@ -255,35 +255,35 @@ interface DE10Pro_bsv_shell #(`DEF_TYPE_PARAMS);
   interface AXI4Stream_Master #( t_tx_id
                                , t_tx_data
                                , t_tx_dest
-                               , t_tx_user) tx_north;
+                               , t_tx_user) axstrm_tx_north;
   interface AXI4Stream_Slave #( t_rx_id
                               , t_rx_data
                               , t_rx_dest
-                              , t_rx_user) rx_north;
+                              , t_rx_user) axstrs_rx_north;
   interface AXI4Stream_Master #( t_tx_id
                                , t_tx_data
                                , t_tx_dest
-                               , t_tx_user) tx_east;
+                               , t_tx_user) axstrm_tx_east;
   interface AXI4Stream_Slave #( t_rx_id
                               , t_rx_data
                               , t_rx_dest
-                              , t_rx_user) rx_east;
+                              , t_rx_user) axstrs_rx_east;
   interface AXI4Stream_Master #( t_tx_id
                                , t_tx_data
                                , t_tx_dest
-                               , t_tx_user) tx_south;
+                               , t_tx_user) axstrm_tx_south;
   interface AXI4Stream_Slave #( t_rx_id
                               , t_rx_data
                               , t_rx_dest
-                              , t_rx_user) rx_south;
+                              , t_rx_user) axstrs_rx_south;
   interface AXI4Stream_Master #( t_tx_id
                                , t_tx_data
                                , t_tx_dest
-                               , t_tx_user) tx_west;
+                               , t_tx_user) axstrm_tx_west;
   interface AXI4Stream_Slave #( t_rx_id
                               , t_rx_data
                               , t_rx_dest
-                              , t_rx_user) rx_west;
+                              , t_rx_user) axstrs_rx_west;
   // Interrupt sender interface
   // --------------------------
   interface Vector #(32, Irq) irqs;
@@ -358,35 +358,35 @@ interface DE10Pro_bsv_shell_Sig #(`DEF_TYPE_PARAMS);
   interface AXI4Stream_Master_Sig #( t_tx_id
                                    , t_tx_data
                                    , t_tx_dest
-                                   , t_tx_user) tx_north;
+                                   , t_tx_user) axstrm_tx_north;
   interface AXI4Stream_Slave_Sig #( t_rx_id
                                   , t_rx_data
                                   , t_rx_dest
-                                  , t_rx_user) rx_north;
+                                  , t_rx_user) axstrs_rx_north;
   interface AXI4Stream_Master_Sig #( t_tx_id
                                    , t_tx_data
                                    , t_tx_dest
-                                   , t_tx_user) tx_east;
+                                   , t_tx_user) axstrm_tx_east;
   interface AXI4Stream_Slave_Sig #( t_rx_id
                                   , t_rx_data
                                   , t_rx_dest
-                                  , t_rx_user) rx_east;
+                                  , t_rx_user) axstrs_rx_east;
   interface AXI4Stream_Master_Sig #( t_tx_id
                                    , t_tx_data
                                    , t_tx_dest
-                                   , t_tx_user) tx_south;
+                                   , t_tx_user) axstrm_tx_south;
   interface AXI4Stream_Slave_Sig #( t_rx_id
                                   , t_rx_data
                                   , t_rx_dest
-                                  , t_rx_user) rx_south;
+                                  , t_rx_user) axstrs_rx_south;
   interface AXI4Stream_Master_Sig #( t_tx_id
                                    , t_tx_data
                                    , t_tx_dest
-                                   , t_tx_user) tx_west;
+                                   , t_tx_user) axstrm_tx_west;
   interface AXI4Stream_Slave_Sig #( t_rx_id
                                   , t_rx_data
                                   , t_rx_dest
-                                  , t_rx_user) rx_west;
+                                  , t_rx_user) axstrs_rx_west;
   // Interrupt sender interface
   // --------------------------
   (* result = "ins_irqs" *)
@@ -442,35 +442,35 @@ interface DE10Pro_bsv_shell_Sig_Avalon #(`DEF_TYPE_PARAMS);
   interface AXI4Stream_Master_Sig #( t_tx_id
                                    , t_tx_data
                                    , t_tx_dest
-                                   , t_tx_user) tx_north;
+                                   , t_tx_user) axstrm_tx_north;
   interface AXI4Stream_Slave_Sig #( t_rx_id
                                   , t_rx_data
                                   , t_rx_dest
-                                  , t_rx_user) rx_north;
+                                  , t_rx_user) axstrs_rx_north;
   interface AXI4Stream_Master_Sig #( t_tx_id
                                    , t_tx_data
                                    , t_tx_dest
-                                   , t_tx_user) tx_east;
+                                   , t_tx_user) axstrm_tx_east;
   interface AXI4Stream_Slave_Sig #( t_rx_id
                                   , t_rx_data
                                   , t_rx_dest
-                                  , t_rx_user) rx_east;
+                                  , t_rx_user) axstrs_rx_east;
   interface AXI4Stream_Master_Sig #( t_tx_id
                                    , t_tx_data
                                    , t_tx_dest
-                                   , t_tx_user) tx_south;
+                                   , t_tx_user) axstrm_tx_south;
   interface AXI4Stream_Slave_Sig #( t_rx_id
                                   , t_rx_data
                                   , t_rx_dest
-                                  , t_rx_user) rx_south;
+                                  , t_rx_user) axstrs_rx_south;
   interface AXI4Stream_Master_Sig #( t_tx_id
                                    , t_tx_data
                                    , t_tx_dest
-                                   , t_tx_user) tx_west;
+                                   , t_tx_user) axstrm_tx_west;
   interface AXI4Stream_Slave_Sig #( t_rx_id
                                   , t_rx_data
                                   , t_rx_dest
-                                  , t_rx_user) rx_west;
+                                  , t_rx_user) axstrs_rx_west;
   // Interrupt sender interface
   // --------------------------
   (* result = "ins_irqs" *)
@@ -490,28 +490,28 @@ module toDE10Pro_bsv_shell_Sig #(DE10Pro_bsv_shell #(`TYPE_PARAMS) ifc)
   let axm_ddrb_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrb);
   let axm_ddrc_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrc);
   let axm_ddrd_sig    <-       toAXI4_Master_Sig (ifc.axm_ddrd);
-  let tx_north_sig    <- toAXI4Stream_Master_Sig (ifc.tx_north);
-  let rx_north_sig    <-  toAXI4Stream_Slave_Sig (ifc.rx_north);
-  let tx_east_sig     <-  toAXI4Stream_Master_Sig (ifc.tx_east);
-  let rx_east_sig     <-   toAXI4Stream_Slave_Sig (ifc.rx_east);
-  let tx_south_sig    <- toAXI4Stream_Master_Sig (ifc.tx_south);
-  let rx_south_sig    <-  toAXI4Stream_Slave_Sig (ifc.rx_south);
-  let tx_west_sig     <-  toAXI4Stream_Master_Sig (ifc.tx_west);
-  let rx_west_sig     <-   toAXI4Stream_Slave_Sig (ifc.rx_west);
-  interface axls_h2f_lw = axls_h2f_lw_sig;
-  interface     axs_h2f =     axs_h2f_sig;
-  interface     axm_f2h =     axm_f2h_sig;
-  interface    axm_ddrb =    axm_ddrb_sig;
-  interface    axm_ddrc =    axm_ddrc_sig;
-  interface    axm_ddrd =    axm_ddrd_sig;
-  interface    tx_north =    tx_north_sig;
-  interface    rx_north =    rx_north_sig;
-  interface     tx_east =     tx_east_sig;
-  interface     rx_east =     rx_east_sig;
-  interface    tx_south =    tx_south_sig;
-  interface    rx_south =    rx_south_sig;
-  interface     tx_west =     tx_west_sig;
-  interface     rx_west =     rx_west_sig;
+  let tx_north_sig    <- toAXI4Stream_Master_Sig (ifc.axstrm_tx_north);
+  let rx_north_sig    <-  toAXI4Stream_Slave_Sig (ifc.axstrs_rx_north);
+  let tx_east_sig     <-  toAXI4Stream_Master_Sig (ifc.axstrm_tx_east);
+  let rx_east_sig     <-   toAXI4Stream_Slave_Sig (ifc.axstrs_rx_east);
+  let tx_south_sig    <- toAXI4Stream_Master_Sig (ifc.axstrm_tx_south);
+  let rx_south_sig    <-  toAXI4Stream_Slave_Sig (ifc.axstrs_rx_south);
+  let tx_west_sig     <-  toAXI4Stream_Master_Sig (ifc.axstrm_tx_west);
+  let rx_west_sig     <-   toAXI4Stream_Slave_Sig (ifc.axstrs_rx_west);
+  interface     axls_h2f_lw = axls_h2f_lw_sig;
+  interface         axs_h2f =     axs_h2f_sig;
+  interface         axm_f2h =     axm_f2h_sig;
+  interface        axm_ddrb =    axm_ddrb_sig;
+  interface        axm_ddrc =    axm_ddrc_sig;
+  interface        axm_ddrd =    axm_ddrd_sig;
+  interface axstrm_tx_north =    tx_north_sig;
+  interface axstrs_rx_north =    rx_north_sig;
+  interface  axstrm_tx_east =     tx_east_sig;
+  interface  axstrs_rx_east =     rx_east_sig;
+  interface axstrm_tx_south =    tx_south_sig;
+  interface axstrs_rx_south =    rx_south_sig;
+  interface  axstrm_tx_west =     tx_west_sig;
+  interface  axstrs_rx_west =     rx_west_sig;
   method irqs = pack (ifc.irqs);
 endmodule
 
@@ -529,28 +529,28 @@ module toDE10Pro_bsv_shell_Sig_Avalon #(DE10Pro_bsv_shell #(`TYPE_PARAMS) ifc)
   let avm_ddrb_sig    <- mkAXI4Manager_to_PipelinedAvalonMMHost (ifc.axm_ddrb);
   let avm_ddrc_sig    <- mkAXI4Manager_to_PipelinedAvalonMMHost (ifc.axm_ddrc);
   let avm_ddrd_sig    <- mkAXI4Manager_to_PipelinedAvalonMMHost (ifc.axm_ddrd);
-  let tx_north_sig    <- toAXI4Stream_Master_Sig (ifc.tx_north);
-  let rx_north_sig    <-  toAXI4Stream_Slave_Sig (ifc.rx_north);
-  let tx_east_sig     <-  toAXI4Stream_Master_Sig (ifc.tx_east);
-  let rx_east_sig     <-   toAXI4Stream_Slave_Sig (ifc.rx_east);
-  let tx_south_sig    <- toAXI4Stream_Master_Sig (ifc.tx_south);
-  let rx_south_sig    <-  toAXI4Stream_Slave_Sig (ifc.rx_south);
-  let tx_west_sig     <-  toAXI4Stream_Master_Sig (ifc.tx_west);
-  let rx_west_sig     <-   toAXI4Stream_Slave_Sig (ifc.rx_west);
-  interface axls_h2f_lw = axls_h2f_lw_sig;
-  interface     axs_h2f =     axs_h2f_sig;
-  interface     axm_f2h =     axm_f2h_sig;
-  interface    avm_ddrb =    avm_ddrb_sig;
-  interface    avm_ddrc =    avm_ddrc_sig;
-  interface    avm_ddrd =    avm_ddrd_sig;
-  interface    tx_north =    tx_north_sig;
-  interface    rx_north =    rx_north_sig;
-  interface     tx_east =     tx_east_sig;
-  interface     rx_east =     rx_east_sig;
-  interface    tx_south =    tx_south_sig;
-  interface    rx_south =    rx_south_sig;
-  interface     tx_west =     tx_west_sig;
-  interface     rx_west =     rx_west_sig;
+  let tx_north_sig    <- toAXI4Stream_Master_Sig (ifc.axstrm_tx_north);
+  let rx_north_sig    <-  toAXI4Stream_Slave_Sig (ifc.axstrs_rx_north);
+  let tx_east_sig     <-  toAXI4Stream_Master_Sig (ifc.axstrm_tx_east);
+  let rx_east_sig     <-   toAXI4Stream_Slave_Sig (ifc.axstrs_rx_east);
+  let tx_south_sig    <- toAXI4Stream_Master_Sig (ifc.axstrm_tx_south);
+  let rx_south_sig    <-  toAXI4Stream_Slave_Sig (ifc.axstrs_rx_south);
+  let tx_west_sig     <-  toAXI4Stream_Master_Sig (ifc.axstrm_tx_west);
+  let rx_west_sig     <-   toAXI4Stream_Slave_Sig (ifc.axstrs_rx_west);
+  interface     axls_h2f_lw = axls_h2f_lw_sig;
+  interface         axs_h2f =     axs_h2f_sig;
+  interface         axm_f2h =     axm_f2h_sig;
+  interface        avm_ddrb =    avm_ddrb_sig;
+  interface        avm_ddrc =    avm_ddrc_sig;
+  interface        avm_ddrd =    avm_ddrd_sig;
+  interface axstrm_tx_north =    tx_north_sig;
+  interface axstrs_rx_north =    rx_north_sig;
+  interface  axstrm_tx_east =     tx_east_sig;
+  interface  axstrs_rx_east =     rx_east_sig;
+  interface axstrm_tx_south =    tx_south_sig;
+  interface axstrs_rx_south =    rx_south_sig;
+  interface  axstrm_tx_west =     tx_west_sig;
+  interface  axstrs_rx_west =     rx_west_sig;
   method irqs = pack (ifc.irqs);
 endmodule
 
@@ -704,20 +704,20 @@ module mkPassThroughToDRAMDE10Pro_bsv_shell (ConcreteDE10Pro_bsv_shell);
               , `H2F_LW_ARUSER
               , `H2F_LW_RUSER )
     alwaysDeadBeef <- mkPerpetualValueAXI4Slave ('hdeadbeef);
-  interface axls_h2f_lw = fromAXI4ToAXI4Lite_Slave (alwaysDeadBeef);
-  interface     axs_h2f = prepend_AXI4_Slave_id (0, h2fSub);
-  interface     axm_f2h = culDeSac;
-  interface    axm_ddrb = ddrbMgr;
-  interface    axm_ddrc = ddrcMgr;
-  interface    axm_ddrd = ddrdMgr;
-  interface    tx_north = nullSource;
-  interface    rx_north =   nullSink;
-  interface     tx_east = nullSource;
-  interface     rx_east =   nullSink;
-  interface    tx_south = nullSource;
-  interface    rx_south =   nullSink;
-  interface     tx_west = nullSource;
-  interface     rx_west =   nullSink;
+  interface     axls_h2f_lw = fromAXI4ToAXI4Lite_Slave (alwaysDeadBeef);
+  interface         axs_h2f = prepend_AXI4_Slave_id (0, h2fSub);
+  interface         axm_f2h = culDeSac;
+  interface        axm_ddrb = ddrbMgr;
+  interface        axm_ddrc = ddrcMgr;
+  interface        axm_ddrd = ddrdMgr;
+  interface axstrm_tx_north = nullSource;
+  interface axstrs_rx_north =   nullSink;
+  interface  axstrm_tx_east = nullSource;
+  interface  axstrs_rx_east =   nullSink;
+  interface axstrm_tx_south = nullSource;
+  interface axstrs_rx_south =   nullSink;
+  interface  axstrm_tx_west = nullSource;
+  interface  axstrs_rx_west =   nullSink;
   interface irqs = replicate (noIrq);
 endmodule
 
@@ -735,20 +735,20 @@ module mkPassThroughToDRAMDE10Pro_bsv_shell_Sig_Avalon
 endmodule
 
 module mkDummyDE10Pro_bsv_shell_Sig (ConcreteDE10Pro_bsv_shell_Sig);
-  interface axls_h2f_lw = culDeSac;
-  interface     axs_h2f = culDeSac;
-  interface     axm_f2h = culDeSac;
-  interface    axm_ddrb = culDeSac;
-  interface    axm_ddrc = culDeSac;
-  interface    axm_ddrd = culDeSac;
-  interface    tx_north = culDeSac;
-  interface    rx_north = culDeSac;
-  interface     tx_east = culDeSac;
-  interface     rx_east = culDeSac;
-  interface    tx_south = culDeSac;
-  interface    rx_south = culDeSac;
-  interface     tx_west = culDeSac;
-  interface     rx_west = culDeSac;
+  interface     axls_h2f_lw = culDeSac;
+  interface         axs_h2f = culDeSac;
+  interface         axm_f2h = culDeSac;
+  interface        axm_ddrb = culDeSac;
+  interface        axm_ddrc = culDeSac;
+  interface        axm_ddrd = culDeSac;
+  interface axstrm_tx_north = culDeSac;
+  interface axstrs_rx_north = culDeSac;
+  interface  axstrm_tx_east = culDeSac;
+  interface  axstrs_rx_east = culDeSac;
+  interface axstrm_tx_south = culDeSac;
+  interface axstrs_rx_south = culDeSac;
+  interface  axstrm_tx_west = culDeSac;
+  interface  axstrs_rx_west = culDeSac;
   interface irqs = 0;
 endmodule
 
