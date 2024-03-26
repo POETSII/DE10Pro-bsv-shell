@@ -59,7 +59,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 
 // Macro helpers
 `define DEF_TYPE_PARAMS \
-// Light-weight HPS to FPGA AXI port parameters \
+/* Light-weight HPS to FPGA AXI port parameters */ \
   numeric type t_h2f_lw_addr \
 , numeric type t_h2f_lw_data \
 , numeric type t_h2f_lw_awuser \
@@ -67,7 +67,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_h2f_lw_buser \
 , numeric type t_h2f_lw_aruser \
 , numeric type t_h2f_lw_ruser \
-// HPS to FPGA AXI port parameters \
+/* HPS to FPGA AXI port parameters */ \
 , numeric type t_h2f_id \
 , numeric type t_h2f_addr \
 , numeric type t_h2f_data \
@@ -76,7 +76,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_h2f_buser \
 , numeric type t_h2f_aruser \
 , numeric type t_h2f_ruser \
-// FPGA to HPS AXI port parameters \
+/* FPGA to HPS AXI port parameters */ \
 , numeric type t_f2h_id \
 , numeric type t_f2h_addr \
 , numeric type t_f2h_data \
@@ -85,7 +85,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_f2h_buser \
 , numeric type t_f2h_aruser \
 , numeric type t_f2h_ruser \
-// DDRB AXI port parameters \
+/* DDRB AXI port parameters */ \
 , numeric type t_ddrb_id \
 , numeric type t_ddrb_addr \
 , numeric type t_ddrb_data \
@@ -94,7 +94,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_ddrb_buser \
 , numeric type t_ddrb_aruser \
 , numeric type t_ddrb_ruser \
-// DDRC AXI port parameters \
+/* DDRC AXI port parameters */ \
 , numeric type t_ddrc_id \
 , numeric type t_ddrc_addr \
 , numeric type t_ddrc_data \
@@ -103,7 +103,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_ddrc_buser \
 , numeric type t_ddrc_aruser \
 , numeric type t_ddrc_ruser \
-// DDRD AXI port parameters \
+/* DDRD AXI port parameters */ \
 , numeric type t_ddrd_id \
 , numeric type t_ddrd_addr \
 , numeric type t_ddrd_data \
@@ -112,7 +112,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , numeric type t_ddrd_buser \
 , numeric type t_ddrd_aruser \
 , numeric type t_ddrd_ruser \
-// High Speed Links \
+/* High Speed Links */ \
 , type t_link_tx \
 , type t_link_rx
 
@@ -124,7 +124,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , t_h2f_lw_buser \
 , t_h2f_lw_aruser \
 , t_h2f_lw_ruser \
-// HPS to FPGA AXI port parameters \
+/* HPS to FPGA AXI port parameters */ \
 , t_h2f_id \
 , t_h2f_addr \
 , t_h2f_data \
@@ -133,7 +133,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , t_h2f_buser \
 , t_h2f_aruser \
 , t_h2f_ruser \
-// FPGA to HPS AXI port parameters \
+/* FPGA to HPS AXI port parameters */ \
 , t_f2h_id \
 , t_f2h_addr \
 , t_f2h_data \
@@ -142,7 +142,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , t_f2h_buser \
 , t_f2h_aruser \
 , t_f2h_ruser \
-// DDRB AXI port parameters \
+/* DDRB AXI port parameters */ \
 , t_ddrb_id \
 , t_ddrb_addr \
 , t_ddrb_data \
@@ -151,7 +151,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , t_ddrb_buser \
 , t_ddrb_aruser \
 , t_ddrb_ruser \
-// DDRC AXI port parameters \
+/* DDRC AXI port parameters */ \
 , t_ddrc_id \
 , t_ddrc_addr \
 , t_ddrc_data \
@@ -160,7 +160,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , t_ddrc_buser \
 , t_ddrc_aruser \
 , t_ddrc_ruser \
-// DDRD AXI port parameters \
+/* DDRD AXI port parameters */ \
 , t_ddrd_id \
 , t_ddrd_addr \
 , t_ddrd_data \
@@ -169,7 +169,7 @@ Irq noIrq = interface Irq; method _read = False; endinterface;
 , t_ddrd_buser \
 , t_ddrd_aruser \
 , t_ddrd_ruser \
-// High Speed Links parameters \
+/* High Speed Links parameters */ \
 , t_link_tx \
 , t_link_rx
 
